@@ -51,9 +51,17 @@ export default function Page() {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", formBlog.title as string);
+    formData.append("description", formBlog.description as string);
+    formData.append("category", formBlog.category as string);
+    formData.append("author_name", formBlog.author_name as string);
+    formData.append("content", formBlog.content as string);
+    formData.append("image", formBlog.image as File);
+    formData.append("author_image", formBlog.author_image as File);
     const response: AxiosResponse = await axios.post(
       "http://localhost:3030/blogs/add",
-      formBlog,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -62,6 +70,8 @@ export default function Page() {
     );
     if (response.status === 201) {
       alert("Success");
+    } else {
+      alert("Something went wrong");
     }
   };
   return (
