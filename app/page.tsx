@@ -1,4 +1,5 @@
 import BlogList from "@/components/Blog/BlogList";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -26,6 +27,13 @@ export default function Home() {
             </button>
           </div>
         </form>
+        <div className="mb-10"></div>
+        <div className="blogType my-10 flex justify-center gap-5">
+          <Link href="/">Techonology</Link>
+          <Link href="/">Market</Link>
+          <Link href="/">Stock</Link>
+          <Link href="/">Engineer</Link>
+        </div>
         <BlogList />
       </div>
     </>
