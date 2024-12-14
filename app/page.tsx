@@ -1,7 +1,53 @@
+"use client";
 import BlogList from "@/components/Blog/BlogList";
 import Link from "next/link";
-
+import { FormEvent, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+interface EmailType {
+  email: string;
+}
 export default function Home() {
+  const [emailBlog, setEmailBlog] = useState<EmailType>({
+    email: "",
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEmailBlog((prevMail) => {
+      return {
+        ...prevMail,
+        [name]: value,
+      };
+    });
+  };
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response: AxiosResponse = await axios.post(
+        "http://localhost:3030/email/add",
+        emailBlog,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.status === 201) {
+        alert("Subcription sent successfully");
+        setEmailBlog({
+          email: "",
+        });
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log("Axios error: " + err);
+        if (err.response) {
+          console.error("Response Data: ", err.response.data);
+        }
+      } else if (err instanceof Error) {
+        console.error("Error: ", err.message);
+      } else {
+        console.log("Unknown: ", err);
+      }
+    }
+  };
   return (
     <>
       <div className="mx-10 my-5">
@@ -12,10 +58,16 @@ export default function Home() {
             porro aperiam velit. Perspiciatis, labore.
           </p>
         </div>
-        <form className="homePage__type mt-10 flex items-center justify-center ">
+        <form
+          onSubmit={handleSubmit}
+          className="homePage__type mt-10 flex items-center justify-center "
+        >
           <div className="shadow-[-10px_10px_0px_#000000]">
             <input
               type="text"
+              name="email"
+              value={emailBlog.email}
+              onChange={handleChange}
               className="border border-gray-600 w-[450px] px-3 py-2 "
               placeholder="Enter your email to subcribe "
             />

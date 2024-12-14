@@ -3,14 +3,14 @@ import { Key, useEffect, useState } from "react";
 import BlogItem from "./BlogItems";
 import axios from "axios";
 interface BlogType {
-  _id: String;
-  title: String;
-  description: String;
-  category: String;
-  image: String;
-  author_name: String;
-  author_image: String;
-  content: String;
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  author_name: string;
+  author_image: string;
+  content: string;
   createAt: Date;
 }
 export default function BlogList() {

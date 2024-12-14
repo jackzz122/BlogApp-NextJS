@@ -4,13 +4,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 interface BlogType {
-  title: String;
-  description: String;
-  category: String;
+  title: string;
+  description: string;
+  category: string;
   image: File | null;
-  author_name: String;
+  author_name: string;
   author_image: File | null;
-  content: String;
+  content: string;
 }
 export default function Page() {
   const [image, setImage] = useState<File | null>(null);
