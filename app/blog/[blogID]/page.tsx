@@ -1,3 +1,4 @@
+import { blogListRoute } from "../../../api/route";
 import Image from "next/image";
 import Link from "next/link";
 import { TbMathGreater } from "react-icons/tb";
@@ -7,7 +8,7 @@ export default async function Page({
   params: Promise<{ blogID: string }>;
 }) {
   const ID = (await params).blogID;
-  const response = await fetch(`http://localhost:3030/blogs/${ID}`);
+  const response = await fetch(`${blogListRoute.details}${ID}`);
   const dataJSON = await response.json();
   const data = dataJSON.blog;
   return (

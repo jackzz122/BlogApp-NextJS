@@ -16,14 +16,17 @@ interface BlogType {
 export default function BlogList() {
   const [blogList, setBlogList] = useState<BlogType[]>([]);
   const getBlogList = async () => {
-    const response = await axios.get("http://localhost:3030/blogs");
-    const data = response.data;
-    setBlogList(data.blogs);
+    try {
+      const response = await axios.get("http://localhost:3030/blogs");
+      const data = response.data;
+      setBlogList(data.blogs);
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     getBlogList();
   }, []);
-  console.log(blogList);
   return (
     <div className="flex  flex-wrap justify-around gap-7 ">
       {blogList.length > 0 ? (

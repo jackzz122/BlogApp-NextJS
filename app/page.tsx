@@ -1,8 +1,10 @@
 "use client";
-import BlogList from "@/components/Blog/BlogList";
+const BlogList = lazy(() => import("@/components/Blog/BlogList"));
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, lazy, useState } from "react";
 import axios, { AxiosResponse } from "axios";
+import { emailRoute } from "@/api/route";
+import { Suspense } from "react";
 interface EmailType {
   email: string;
 }
@@ -23,7 +25,7 @@ export default function Home() {
     e.preventDefault();
     try {
       const response: AxiosResponse = await axios.post(
-        "http://localhost:3030/email/add",
+        emailRoute.post,
         emailBlog,
         {
           headers: { "Content-Type": "application/json" },
@@ -37,14 +39,14 @@ export default function Home() {
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.log("Axios error: " + err);
+        alert("Axios error: " + err);
         if (err.response) {
-          console.error("Response Data: ", err.response.data);
+          alert("Response Data: " + err.response.data);
         }
       } else if (err instanceof Error) {
-        console.error("Error: ", err.message);
+        alert("Error: " + err.message);
       } else {
-        console.log("Unknown: ", err);
+        alert("Unknown: " + err);
       }
     }
   };
@@ -86,7 +88,9 @@ export default function Home() {
           <Link href="/">Stock</Link>
           <Link href="/">Engineer</Link>
         </div>
-        <BlogList />
+        <Suspense fallback={<p>Loading BlogList ...</p>}>
+          <BlogList />
+        </Suspense>
       </div>
     </>
   );

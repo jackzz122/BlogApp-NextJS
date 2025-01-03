@@ -1,15 +1,16 @@
 "use client";
 
+import { loginRoute } from "@/api/route";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 interface UserType {
-  username: string;
   phoneNumber: string;
   password: string;
 }
 export default function Page() {
+  const router = useRouter();
   const [loginForm, setLoginForm] = useState<UserType>({
-    username: "",
     phoneNumber: "",
     password: "",
   });
@@ -22,25 +23,25 @@ export default function Page() {
       };
     });
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const response = await axios.post(loginRoute, loginForm, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        router.push("/");
+      }
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div className="w-[900px] mx-auto">
       <h1 className="text-3xl font-bold text-center mt-10 mb-6">Login</h1>
       <form onSubmit={handleSubmit} className="">
-        <label htmlFor="username" className="font-bold mb-2 block">
-          Username
-        </label>
-        <input
-          id="username"
-          onChange={handleChange}
-          type="text"
-          name="username"
-          value={loginForm.username}
-          className="border border-black p-4 block w-full mb-5"
-          placeholder="Enter your username"
-        />
         <label htmlFor="phoneNumber" className="font-bold mb-2 block">
           Phone number
         </label>
@@ -73,6 +74,17 @@ export default function Page() {
           >
             Login
           </button>
+        </div>
+        <div>
+          <p className="mt-2">
+            Dont have account ?{" "}
+            <span
+              onClick={() => router.push("/register")}
+              className="font-bold cursor-pointer"
+            >
+              Register Here
+            </span>
+          </p>
         </div>
       </form>
     </div>

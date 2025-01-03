@@ -4,7 +4,8 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 const Links: {
   name: string;
   href: string;
@@ -28,7 +29,13 @@ const Links: {
 ];
 export default function Header() {
   const pathName = usePathname();
-  const isLogin = false;
+  const token = Cookies.get("token");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    if (token !== undefined) {
+      setIsLoggedIn(true);
+    }
+  }, [token]);
   return (
     <header className="flex items-center gap-3 justify-between mx-10 mt-4">
       <Link href="/" className="header__logo flex items-center gap-2 text-2xl">
@@ -53,12 +60,24 @@ export default function Header() {
         </ul>
       </div>
       <div className="flex items-center gap-3">
-        {isLogin ? (
+        {isLoggedIn ? (
           <>
             <FaSearch className="cursor-pointer" />
             <button className="bg-black px-3 py-2 text-white font-bold rounded-lg">
               Buy Now
             </button>
+            <div>
+              <button
+                onClick={() => {
+                  Cookies.remove("token");
+                  setIsLoggedIn(false);
+                  window.location.reload();
+                }}
+                className="bg-white px-3 py-2 text-black font-bold rounded-lg border border-gray-500"
+              >
+                LogOut
+              </button>
+            </div>
           </>
         ) : (
           <div className="flex items-center gap-3">
